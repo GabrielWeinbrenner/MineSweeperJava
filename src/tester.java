@@ -50,7 +50,7 @@ public class tester {
 					System.out.println(gameOver);
 					break;
 				}else {
-					board[row][column] = "O";
+					board[row][column] =  Integer.toString(checkMines(row,column,mines));
 				}
 				if(isGameWon(board, amountOfMines)) {
 					System.out.println(gameWon);
@@ -65,6 +65,29 @@ public class tester {
 			board = new String[9][9];
 			mines = setMine(board, amountOfMines);
 		}while(true);
+	}
+	public static int checkMines(int row, int col, String[] mines) {
+		/*
+		 * [0,0], [0,1], [0,2]
+		 * [1,0], [1,1], [1,2]
+		 * [2,0], [2,1], [2,2]
+		 * */
+		int count = 0;
+		for(int i = row-1; i <= row+1; i++) {
+			for(int j = col-1; j <= col+1;j++) {
+				if(!(i == row && j == col)) {	
+					// If array is not out of bounds do this
+					try {
+						if(isMineHit(i,j, mines).equals("X")) {			
+							count++;
+						}
+					}catch(Exception e){
+						continue;
+					}
+				}
+			}
+		}
+		return count;
 	}
 	public static boolean isGameWon(String[][] board, int amountOfMines) {
 		var count = 0;
@@ -94,6 +117,7 @@ public class tester {
 			System.out.println("");
 		}
 	}
+
 	public static String[] setMine(String[][] board, int numMines) {
 		for(int i = 0 ;i < board.length; i++) {
 			for(int j = 0; j < board[i].length; j++) {
@@ -115,7 +139,7 @@ public class tester {
 	}
 	public static String isMineHit(int row, int col, String[] mines) {
 		String coords = (row)+" "+(col);
-		if(!(Arrays.asList(mines).contains(coords))) {
+		if(Arrays.asList(mines).contains(coords)) {
 			return "X";
 		}
 		return "O";
